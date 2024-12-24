@@ -1,24 +1,42 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  ActivityIndicator,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
 
+import TrackPlayer from 'react-native-track-player';
+import { setUpPlayer, addTrack } from '../musicPlayerService';
+
+
+
 function App(): React.JSX.Element {
+
+  const [isPlayerReady, setIsPlayerReady] = useState(false)
   
+  async function setUp () {
+    let isSetup = await setUpPlayer()
+
+    if (isSetup) {
+      await addTrack()
+    }
+
+    setIsPlayerReady(isSetup)
+  }
+
+  if (!isPlayerReady) {
+    return (
+      <SafeAreaView>
+        <ActivityIndicator />
+      </SafeAreaView>
+    )
+  }
+
   return (
     <SafeAreaView>
       <StatusBar />
@@ -30,22 +48,7 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  container: {}
 });
 
 export default App;
